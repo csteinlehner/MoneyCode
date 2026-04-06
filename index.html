@@ -518,7 +518,7 @@
     const lines = [
       'BCD',
       '002',
-      '2',
+      '1',   // 1 = UTF-8 per EPC QR Code Guidelines v3.0
       'SCT',
       bic || '',
       name.trim().slice(0, 70),
@@ -563,6 +563,7 @@
 
     // Validate reason length
     if (reason.length > 140) {
+      document.getElementById('err-reason').textContent = 'Maximum 140 characters.';
       showError('err-reason', 'inp-reason'); valid = false;
     } else {
       hideError('err-reason', 'inp-reason');
@@ -571,6 +572,14 @@
     if (!valid) return;
 
     const payload = buildGiroCode({ bic, name, iban, amount: amountRaw, reason });
+
+    // EPC spec caps payload at 331 bytes (UTF-8 encoded)
+    if (new TextEncoder().encode(payload).length > 331) {
+      showError('err-reason', 'inp-reason');
+      document.getElementById('err-reason').textContent =
+        'Combined payload exceeds 331-byte EPC limit. Shorten the reason.';
+      return;
+    }
 
     // Render QR
     const container = document.getElementById('qrcode');
