@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GiroCode Generator</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#003366">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="GiroCode">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #003366;
+      color: #fff;
+      padding: 0 1.5rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,.35);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    header h1 span {
+      font-weight: 300;
+      opacity: .75;
+    }
+    #btn-settings {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff;
+      border-radius: 6px;
+      padding: .35rem .85rem;
+      font-size: .85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      transition: background .15s;
+    }
+    #btn-settings:hover { background: rgba(255,255,255,.25); }
+
+    /* ── Layout ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+    }
+
+    /* Settings-not-configured banner */
+    #banner-setup {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: .8rem 1.1rem;
+      margin-bottom: 1.2rem;
+      font-size: .9rem;
+      display: none;
+    }
+    #banner-setup a { color: #003366; font-weight: 600; cursor: pointer; text-decoration: underline; }
+
+    /* ── Views ── */
+    #view-transfer, #view-settings { display: none; }
+    #view-transfer.active, #view-settings.active { display: block; }
+
+    /* ── Transfer view grid ── */
+    .transfer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+    @media (max-width: 640px) {
+      .transfer-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border: 1px solid #d8dde6;
+      border-radius: 10px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .card-title {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #6c757d;
+      margin-bottom: 1.1rem;
+      padding-bottom: .6rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    /* ── Form elements ── */
+    .field { margin-bottom: 1.1rem; }
+    .field:last-child { margin-bottom: 0; }
+    label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: .35rem;
+      letter-spacing: .02em;
+    }
+    label .opt { font-weight: 400; color: #adb5bd; font-size: .75rem; }
+    input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      border: 1px solid #c8d0da;
+      border-radius: 6px;
+      padding: .55rem .75rem;
+      font-size: .95rem;
+      font-family: inherit;
+      color: #1a1a2e;
+      background: #fdfdfe;
+      transition: border-color .15s, box-shadow .15s;
+      outline: none;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+      border-color: #003366;
+      box-shadow: 0 0 0 3px rgba(0,51,102,.12);
+    }
+    input.error, textarea.error { border-color: #dc3545; }
+    .field-error {
+      font-size: .78rem;
+      color: #dc3545;
+      margin-top: .3rem;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+    .char-counter {
+      font-size: .75rem;
+      color: #adb5bd;
+      text-align: right;
+      margin-top: .25rem;
+    }
+    .char-counter.warn { color: #e67e22; }
+    .char-counter.over { color: #dc3545; }
+
+    /* Amount input with EUR prefix */
+    .amount-wrap {
+      display: flex;
+      align-items: stretch;
+    }
+    .amount-prefix {
+      background: #e9ecef;
+      border: 1px solid #c8d0da;
+      border-right: none;
+      border-radius: 6px 0 0 6px;
+      padding: .55rem .75rem;
+      font-size: .95rem;
+      font-weight: 600;
+      color: #495057;
+      display: flex;
+      align-items: center;
+    }
+    .amount-wrap input {
+      border-radius: 0 6px 6px 0;
+      flex: 1;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      border: none;
+      border-radius: 7px;
+      padding: .65rem 1.4rem;
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s, transform .08s, box-shadow .15s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary {
+      background: #003366;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,51,102,.3);
+    }
+    .btn-primary:hover { background: #004080; }
+    .btn-primary:disabled { background: #8da9c4; cursor: not-allowed; box-shadow: none; transform: none; }
+    .btn-secondary {
+      background: #e9ecef;
+      color: #495057;
+    }
+    .btn-secondary:hover { background: #dee2e6; }
+    .btn-danger {
+      background: #fff;
+      color: #dc3545;
+      border: 1px solid #dc3545;
+    }
+    .btn-danger:hover { background: #fff5f5; }
+    .btn-sm { padding: .4rem .9rem; font-size: .82rem; }
+    .btn-full { width: 100%; }
+
+    /* ── QR card ── */
+    #qr-card { text-align: center; }
+    #qr-placeholder {
+      border: 2px dashed #c8d0da;
+      border-radius: 8px;
+      padding: 2.5rem 1rem;
+      color: #adb5bd;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+    }
+    #qrcode {
+      display: inline-block;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    #qrcode img, #qrcode canvas { display: block; }
+
+    /* ── Transfer summary ── */
+    #summary {
+      display: none;
+      margin-top: 1rem;
+    }
+    #summary.visible { display: block; }
+    dl.summary-list {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .35rem .75rem;
+      font-size: .88rem;
+      border-top: 1px solid #e9ecef;
+      padding-top: .85rem;
+      margin-top: .85rem;
+    }
+    dl.summary-list dt {
+      font-weight: 600;
+      color: #6c757d;
+      white-space: nowrap;
+    }
+    dl.summary-list dd {
+      color: #1a1a2e;
+      word-break: break-all;
+      font-family: 'Courier New', monospace;
+      font-size: .85rem;
+    }
+    dl.summary-list dd.amount-val {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #003366;
+      font-family: inherit;
+    }
+
+    /* Print button row */
+    .qr-actions {
+      display: flex;
+      gap: .6rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: .75rem;
+    }
+
+    /* ── Settings view ── */
+    #view-settings .card { max-width: 520px; margin: 0 auto; }
+    .settings-actions {
+      display: flex;
+      gap: .7rem;
+      margin-top: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      font-size: .75rem;
+      color: #adb5bd;
+      padding: 1.5rem 1rem;
+    }
+
+    /* ── Print styles ── */
+    @media print {
+      header, footer, #view-transfer .card:first-child,
+      .qr-actions, #btn-settings, #banner-setup { display: none !important; }
+      body { background: #fff; }
+      .transfer-grid { display: block; }
+      #qr-card { box-shadow: none; border: none; }
+      #summary { display: block !important; }
+      dl.summary-list dt { color: #333; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>GiroCode <span>Generator</span></h1>
+  <button id="btn-settings" onclick="toggleSettings()">&#9881; Settings</button>
+</header>
+
+<main>
+  <div id="banner-setup">
+    Beneficiary details not configured. <a onclick="toggleSettings()">Open Settings</a> to enter IBAN and name.
+  </div>
+
+  <!-- ══ Transfer View ══ -->
+  <div id="view-transfer" class="active">
+    <div class="transfer-grid">
+
+      <!-- Left: Input form -->
+      <div class="card">
+        <div class="card-title">New Transfer</div>
+
+        <div class="field">
+          <label for="inp-amount">Amount</label>
+          <div class="amount-wrap">
+            <span class="amount-prefix">EUR</span>
+            <input type="number" id="inp-amount" placeholder="0.00" min="0.01" max="999999999.99" step="0.01">
+          </div>
+          <div class="field-error" id="err-amount">Please enter a valid amount (max EUR 999,999,999.99).</div>
+        </div>
+
+        <div class="field">
+          <label for="inp-reason">Reason / Reference</label>
+          <input type="text" id="inp-reason" placeholder="e.g. Invoice 2024-001" maxlength="140">
+          <div class="char-counter"><span id="reason-count">0</span> / 140</div>
+          <div class="field-error" id="err-reason">Maximum 140 characters.</div>
+        </div>
+
+        <div class="field" style="margin-top:1.4rem">
+          <button class="btn btn-primary btn-full" id="btn-generate" onclick="generate()">
+            &#9654; Generate QR Code
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: QR code + summary -->
+      <div class="card" id="qr-card">
+        <div class="card-title">GiroCode</div>
+        <div id="qr-placeholder">Fill in the form and click<br><strong>Generate QR Code</strong></div>
+        <div id="qrcode" style="display:none"></div>
+
+        <div id="summary">
+          <dl class="summary-list">
+            <dt>Recipient</dt><dd id="sum-name">—</dd>
+            <dt>IBAN</dt><dd id="sum-iban">—</dd>
+            <dt>BIC</dt><dd id="sum-bic">—</dd>
+            <dt>Amount</dt><dd id="sum-amount" class="amount-val">—</dd>
+            <dt>Reason</dt><dd id="sum-reason">—</dd>
+          </dl>
+          <div class="qr-actions">
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">&#128438; Print</button>
+            <button class="btn btn-secondary btn-sm" onclick="resetForm()">&#x21BA; New Transfer</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ Settings View ══ -->
+  <div id="view-settings">
+    <div class="card">
+      <div class="card-title">Beneficiary Settings</div>
+      <p style="font-size:.85rem;color:#6c757d;margin-bottom:1.2rem;">
+        These details are saved locally on this device and pre-filled into every GiroCode.
+      </p>
+
+      <div class="field">
+        <label for="set-name">Beneficiary Name</label>
+        <input type="text" id="set-name" placeholder="e.g. John Doe" maxlength="70">
+        <div class="field-error" id="err-set-name">Name is required (max 70 characters).</div>
+      </div>
+
+      <div class="field">
+        <label for="set-iban">IBAN</label>
+        <input type="text" id="set-iban" placeholder="e.g. DE89370400440532013000" maxlength="34" style="text-transform:uppercase">
+        <div class="field-error" id="err-set-iban">Enter a valid IBAN (2 letters + up to 32 alphanumeric characters).</div>
+      </div>
+
+      <div class="field">
+        <label for="set-bic">BIC / SWIFT <span class="opt">(optional)</span></label>
+        <input type="text" id="set-bic" placeholder="e.g. COBADEFFXXX" maxlength="11" style="text-transform:uppercase">
+        <div class="field-error" id="err-set-bic">BIC must be 8 or 11 characters.</div>
+      </div>
+
+      <div class="settings-actions">
+        <button class="btn btn-primary" onclick="saveSettings()">&#10003; Save Settings</button>
+        <button class="btn btn-secondary" onclick="toggleSettings()">Cancel</button>
+        <button class="btn btn-danger btn-sm" onclick="clearSettings()" style="margin-left:auto">Clear All Data</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  GiroCode Generator &mdash; EPC QR Code v002 &middot; SEPA Credit Transfer &middot; All data stays on your device
+</footer>
+
+<script src="qrcode.min.js"></script>
+<script>
+  // ── Config keys ──
+  const KEY_NAME = 'gc_name';
+  const KEY_IBAN = 'gc_iban';
+  const KEY_BIC  = 'gc_bic';
+
+  let currentQR = null;
+
+  // ── Init ──
+  document.addEventListener('DOMContentLoaded', () => {
+    loadSettingsIntoForm();
+    updateBanner();
+    wireReasonCounter();
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  });
+
+  // ── View toggle ──
+  function toggleSettings() {
+    const isSettings = document.getElementById('view-settings').classList.contains('active');
+    document.getElementById('view-transfer').classList.toggle('active', isSettings);
+    document.getElementById('view-settings').classList.toggle('active', !isSettings);
+    document.getElementById('btn-settings').textContent = isSettings ? '⚙ Settings' : '✕ Close';
+    if (!isSettings) loadSettingsIntoForm();
+  }
+
+  // ── Reason counter ──
+  function wireReasonCounter() {
+    const inp = document.getElementById('inp-reason');
+    const counter = document.getElementById('reason-count');
+    inp.addEventListener('input', () => {
+      const len = inp.value.length;
+      counter.textContent = len;
+      const wrap = counter.parentElement;
+      wrap.className = 'char-counter' + (len > 130 ? (len >= 140 ? ' over' : ' warn') : '');
+    });
+  }
+
+  // ── Banner ──
+  function updateBanner() {
+    const configured = localStorage.getItem(KEY_IBAN) && localStorage.getItem(KEY_NAME);
+    document.getElementById('banner-setup').style.display = configured ? 'none' : 'block';
+  }
+
+  // ── Settings ──
+  function loadSettingsIntoForm() {
+    document.getElementById('set-name').value = localStorage.getItem(KEY_NAME) || '';
+    document.getElementById('set-iban').value = localStorage.getItem(KEY_IBAN) || '';
+    document.getElementById('set-bic').value  = localStorage.getItem(KEY_BIC)  || '';
+  }
+
+  function saveSettings() {
+    const name = document.getElementById('set-name').value.trim();
+    const iban = document.getElementById('set-iban').value.trim().toUpperCase().replace(/\s/g,'');
+    const bic  = document.getElementById('set-bic').value.trim().toUpperCase().replace(/\s/g,'');
+
+    let valid = true;
+
+    // Name
+    if (!name || name.length > 70) {
+      showError('err-set-name', 'set-name'); valid = false;
+    } else {
+      hideError('err-set-name', 'set-name');
+    }
+
+    // IBAN: 2 letters + 13–32 alphanumeric = 15–34 total
+    if (!(/^[A-Z]{2}[A-Z0-9]{13,32}$/.test(iban))) {
+      showError('err-set-iban', 'set-iban'); valid = false;
+    } else {
+      hideError('err-set-iban', 'set-iban');
+    }
+
+    // BIC: optional but if provided must be 8 or 11 chars
+    if (bic && !(/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(bic))) {
+      showError('err-set-bic', 'set-bic'); valid = false;
+    } else {
+      hideError('err-set-bic', 'set-bic');
+    }
+
+    if (!valid) return;
+
+    localStorage.setItem(KEY_NAME, name);
+    localStorage.setItem(KEY_IBAN, iban);
+    if (bic) localStorage.setItem(KEY_BIC, bic);
+    else localStorage.removeItem(KEY_BIC);
+
+    updateBanner();
+    toggleSettings();
+  }
+
+  function clearSettings() {
+    if (!confirm('Clear all stored beneficiary data from this device?')) return;
+    localStorage.removeItem(KEY_NAME);
+    localStorage.removeItem(KEY_IBAN);
+    localStorage.removeItem(KEY_BIC);
+    loadSettingsIntoForm();
+    updateBanner();
+  }
+
+  // ── GiroCode payload builder (EPC QR v002) ──
+  function buildGiroCode({ bic, name, iban, amount, reason }) {
+    const lines = [
+      'BCD',
+      '002',
+      '2',
+      'SCT',
+      bic || '',
+      name.trim().slice(0, 70),
+      iban.trim().toUpperCase(),
+      amount ? 'EUR' + parseFloat(amount).toFixed(2) : '',
+      '',   // Purpose code
+      '',   // Structured remittance reference
+      reason.trim().slice(0, 140),
+      ''    // Originator-to-beneficiary info
+    ];
+    return lines.join('\n');
+  }
+
+  // ── Generate ──
+  function generate() {
+    const amountRaw = document.getElementById('inp-amount').value;
+    const reason    = document.getElementById('inp-reason').value.trim();
+
+    const name = localStorage.getItem(KEY_NAME);
+    const iban = localStorage.getItem(KEY_IBAN);
+    const bic  = localStorage.getItem(KEY_BIC) || '';
+
+    if (!name || !iban) {
+      toggleSettings();
+      return;
+    }
+
+    let valid = true;
+
+    // Validate amount
+    const amount = parseFloat(amountRaw);
+    if (!amountRaw || isNaN(amount) || amount <= 0 || amount > 999999999.99) {
+      showError('err-amount', 'inp-amount'); valid = false;
+    } else {
+      // Check max 2 decimal places
+      if (!/^\d+(\.\d{1,2})?$/.test(amountRaw.trim())) {
+        showError('err-amount', 'inp-amount'); valid = false;
+      } else {
+        hideError('err-amount', 'inp-amount');
+      }
+    }
+
+    // Validate reason length
+    if (reason.length > 140) {
+      showError('err-reason', 'inp-reason'); valid = false;
+    } else {
+      hideError('err-reason', 'inp-reason');
+    }
+
+    if (!valid) return;
+
+    const payload = buildGiroCode({ bic, name, iban, amount: amountRaw, reason });
+
+    // Render QR
+    const container = document.getElementById('qrcode');
+    container.innerHTML = '';
+    if (currentQR) { currentQR = null; }
+
+    document.getElementById('qr-placeholder').style.display = 'none';
+    container.style.display = 'inline-block';
+
+    currentQR = new QRCode(container, {
+      text: payload,
+      width: 256,
+      height: 256,
+      correctLevel: QRCode.CorrectLevel.M
+    });
+
+    // Populate summary
+    document.getElementById('sum-name').textContent   = name;
+    document.getElementById('sum-iban').textContent   = formatIBAN(iban);
+    document.getElementById('sum-bic').textContent    = bic || '—';
+    document.getElementById('sum-amount').textContent = 'EUR ' + parseFloat(amountRaw).toFixed(2);
+    document.getElementById('sum-reason').textContent = reason || '—';
+
+    document.getElementById('summary').classList.add('visible');
+  }
+
+  function resetForm() {
+    document.getElementById('inp-amount').value = '';
+    document.getElementById('inp-reason').value = '';
+    document.getElementById('reason-count').textContent = '0';
+    document.getElementById('qrcode').style.display = 'none';
+    document.getElementById('qrcode').innerHTML = '';
+    document.getElementById('qr-placeholder').style.display = '';
+    document.getElementById('summary').classList.remove('visible');
+    currentQR = null;
+  }
+
+  // ── Helpers ──
+  function showError(errId, inputId) {
+    document.getElementById(errId).classList.add('visible');
+    document.getElementById(inputId).classList.add('error');
+  }
+  function hideError(errId, inputId) {
+    document.getElementById(errId).classList.remove('visible');
+    document.getElementById(inputId).classList.remove('error');
+  }
+
+  function formatIBAN(iban) {
+    return iban.replace(/(.{4})/g, '$1 ').trim();
+  }
+</script>
+</body>
+</html>
