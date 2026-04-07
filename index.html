@@ -156,15 +156,15 @@
       max-width: 420px;
     }
 
-    /* ── Grid ── */
-    .transfer-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-      align-items: start;
-    }
+    /* ── Steps ── */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .form-card { max-width: 480px; margin: 0 auto; }
+
+    .qr-result { max-width: 480px; margin: 0 auto; }
+
     @media (max-width: 640px) {
-      .transfer-grid { grid-template-columns: 1fr; }
       .hero-card { padding: 2rem 1.5rem; }
     }
 
@@ -264,14 +264,6 @@
 
     /* ── QR ── */
     #qr-card { text-align: center; }
-    #qr-placeholder {
-      background: var(--surface);
-      border-radius: 12px;
-      padding: 3rem 1rem;
-      color: var(--text-muted);
-      font-size: .88rem;
-    }
-    #qr-placeholder svg { display: block; margin: 0 auto .75rem; opacity: .3; }
     #qrcode {
       display: inline-block;
       padding: 16px;
@@ -282,8 +274,6 @@
     }
     #qrcode img, #qrcode canvas { display: block; }
 
-    #summary { display: none; margin-top: 1rem; }
-    #summary.visible { display: block; }
     dl.summary-list {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -477,11 +467,10 @@
     }
 
     @media print {
-      nav, footer, .hero-card, .qr-actions, #banner-setup { display: none !important; }
+      nav, footer, .hero-card, .qr-actions, #banner-setup, #step-form { display: none !important; }
       body { background: #fff; }
-      .transfer-grid { display: block; }
+      #step-qr { display: block !important; }
       #qr-card { box-shadow: none; border: none; }
-      #summary { display: block !important; }
     }
 
     /* ── Toast ── */
@@ -510,12 +499,13 @@
 
   <!-- ══ Transfer ══ -->
   <div id="view-transfer" class="view active">
-    <div class="hero-card">
-      <div class="hero-title">Get paid via bank transfer.</div>
-      <div class="hero-sub">Generate a QR code. The payer scans it with their banking app and sends you money instantly via SEPA.</div>
-    </div>
-    <div class="transfer-grid">
-      <div class="card">
+    <!-- Step 1: Input -->
+    <div id="step-form" class="step active">
+      <div class="hero-card">
+        <div class="hero-title">Get paid via bank transfer.</div>
+        <div class="hero-sub">Generate a QR code. The payer scans it with their banking app and sends you money instantly via SEPA.</div>
+      </div>
+      <div class="card form-card">
         <div class="card-label">Payment Details</div>
         <div class="field">
           <label for="inp-amount">Amount</label>
@@ -535,25 +525,22 @@
           <button class="btn btn-primary btn-full" onclick="generate()">Generate QR Code</button>
         </div>
       </div>
+    </div>
 
-      <div class="card" id="qr-card">
+    <!-- Step 2: QR Result -->
+    <div id="step-qr" class="step">
+      <div class="card qr-result" id="qr-card">
         <div class="card-label">Your QR Code</div>
-        <div id="qr-placeholder">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" /></svg>
-          Enter an amount and generate your code
-        </div>
-        <div id="qrcode" style="display:none"></div>
-        <div id="summary">
-          <dl class="summary-list">
-            <dt>Recipient</dt><dd id="sum-name"></dd>
-            <dt>IBAN</dt><dd id="sum-iban"></dd>
-            <dt>BIC</dt><dd id="sum-bic"></dd>
-            <dt>Amount</dt><dd id="sum-amount" class="amount-val"></dd>
-            <dt>Reference</dt><dd id="sum-reason"></dd>
-          </dl>
-          <div class="qr-actions">
-            <button class="btn btn-secondary btn-sm" onclick="resetForm()">New Transfer</button>
-          </div>
+        <div id="qrcode"></div>
+        <dl class="summary-list">
+          <dt>Recipient</dt><dd id="sum-name"></dd>
+          <dt>IBAN</dt><dd id="sum-iban"></dd>
+          <dt>BIC</dt><dd id="sum-bic"></dd>
+          <dt>Amount</dt><dd id="sum-amount" class="amount-val"></dd>
+          <dt>Reference</dt><dd id="sum-reason"></dd>
+        </dl>
+        <div class="qr-actions">
+          <button class="btn btn-primary btn-full" onclick="resetForm()">New Transfer</button>
         </div>
       </div>
     </div>
@@ -755,14 +742,14 @@
     const p=buildGiroCode({bic:bi,name:n,iban:ib,amount:ar,reason:r});
     if(new TextEncoder().encode(p).length>331){showError('err-reason','inp-reason');document.getElementById('err-reason').textContent='Payload exceeds 331-byte EPC limit. Shorten the reference.';return;}
     const c=document.getElementById('qrcode');c.innerHTML='';
-    document.getElementById('qr-placeholder').style.display='none';c.style.display='inline-block';
     currentQR=new QRCode(c,{text:p,width:256,height:256,correctLevel:QRCode.CorrectLevel.M});
     document.getElementById('sum-name').textContent=n;document.getElementById('sum-iban').textContent=formatIBAN(ib);
     document.getElementById('sum-bic').textContent=bi||'\u2014';document.getElementById('sum-amount').textContent='EUR '+parseFloat(ar).toFixed(2);
-    document.getElementById('sum-reason').textContent=r||'\u2014';document.getElementById('summary').classList.add('visible');
+    document.getElementById('sum-reason').textContent=r||'\u2014';
+    document.getElementById('step-form').classList.remove('active');document.getElementById('step-qr').classList.add('active');
   }
 
-  function resetForm(){document.getElementById('inp-amount').value='';document.getElementById('inp-reason').value='';document.getElementById('reason-count').textContent='0';document.getElementById('qrcode').style.display='none';document.getElementById('qrcode').innerHTML='';document.getElementById('qr-placeholder').style.display='';document.getElementById('summary').classList.remove('visible');currentQR=null;}
+  function resetForm(){document.getElementById('inp-amount').value='';document.getElementById('inp-reason').value='';document.getElementById('reason-count').textContent='0';document.getElementById('qrcode').innerHTML='';currentQR=null;document.getElementById('step-qr').classList.remove('active');document.getElementById('step-form').classList.add('active');}
   function showError(e,i){document.getElementById(e).classList.add('visible');document.getElementById(i).classList.add('error');}
   function hideError(e,i){document.getElementById(e).classList.remove('visible');document.getElementById(i).classList.remove('error');}
   function formatIBAN(s){return s.replace(/(.{4})/g,'$1 ').trim();}
