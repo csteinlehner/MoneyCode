@@ -4,8 +4,10 @@ title: 'Two-step workflow: input form → QR code display'
 status: completed
 type: feature
 priority: normal
+tags:
+    - branch:feature/two-step-workflow
 created_at: 2026-04-07T13:52:59Z
-updated_at: 2026-04-07T18:40:05Z
+updated_at: 2026-04-07T18:43:34Z
 ---
 
 Separate the app into two distinct views instead of showing everything on one screen:
