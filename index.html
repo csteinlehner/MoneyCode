@@ -5,83 +5,158 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TransferSnap</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#003366">
+  <meta name="theme-color" content="#2563EB">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="TransferSnap">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-      font-size: 15px;
-      background: #f0f2f5;
-      color: #1a1a2e;
-      min-height: 100vh;
+    :root {
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --primary-light: #EFF6FF;
+      --accent: #10B981;
+      --bg: #FFFFFF;
+      --surface: #F9FAFB;
+      --card: #FFFFFF;
+      --border: #F3F4F6;
+      --border-strong: #E5E7EB;
+      --text: #111827;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --error: #EF4444;
+      --warning: #F59E0B;
+      --radius: 16px;
     }
 
-    /* ── Header ── */
-    header {
-      background: #003366;
-      color: #fff;
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      background: var(--surface);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
       padding: 0 1.5rem;
       height: 56px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0,0,0,.35);
       position: sticky;
       top: 0;
       z-index: 10;
     }
-    header h1 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: .02em;
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
     }
-    header h1 span {
-      font-weight: 300;
-      opacity: .75;
-    }
-    #btn-settings {
-      background: rgba(255,255,255,.15);
-      border: 1px solid rgba(255,255,255,.3);
-      color: #fff;
-      border-radius: 6px;
-      padding: .35rem .85rem;
-      font-size: .85rem;
-      cursor: pointer;
+    .logo span { color: var(--primary); }
+    .nav-right {
       display: flex;
       align-items: center;
-      gap: .4rem;
-      transition: background .15s;
+      gap: .25rem;
     }
-    #btn-settings:hover { background: rgba(255,255,255,.25); }
+    .nav-link {
+      background: none;
+      border: none;
+      padding: .4rem .7rem;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: 6px;
+      transition: all .15s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface); }
+    .nav-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--border-strong);
+      margin: 0 .15rem;
+    }
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      padding: .4rem;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background .15s;
+      display: flex;
+      align-items: center;
+    }
+    .nav-icon-btn:hover { background: var(--surface); }
+    .nav-icon-btn svg { width: 20px; height: 20px; color: var(--text-secondary); }
 
     /* ── Layout ── */
     main {
-      max-width: 960px;
+      max-width: 880px;
       margin: 0 auto;
-      padding: 1.5rem 1rem;
+      padding: 2rem 1.25rem;
     }
 
-    /* Settings-not-configured banner */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── Banner ── */
     #banner-setup {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
-      border-radius: 8px;
-      padding: .8rem 1.1rem;
-      margin-bottom: 1.2rem;
-      font-size: .9rem;
+      background: var(--primary-light);
+      border: 1px solid #BFDBFE;
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: .88rem;
+      color: #1E40AF;
       display: none;
+      align-items: center;
+      gap: .75rem;
     }
-    #banner-setup a { color: #003366; font-weight: 600; cursor: pointer; text-decoration: underline; }
+    #banner-setup a { color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: underline; }
 
-    /* ── Views ── */
-    #view-transfer, #view-settings { display: none; }
-    #view-transfer.active, #view-settings.active { display: block; }
+    /* ── Hero ── */
+    .hero-card {
+      background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -15%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,.06);
+      border-radius: 50%;
+    }
+    .hero-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: .4rem;
+    }
+    .hero-sub {
+      font-size: .9rem;
+      opacity: .8;
+      font-weight: 400;
+      max-width: 420px;
+    }
 
-    /* ── Transfer view grid ── */
+    /* ── Grid ── */
     .transfer-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -90,93 +165,73 @@
     }
     @media (max-width: 640px) {
       .transfer-grid { grid-template-columns: 1fr; }
+      .hero-card { padding: 2rem 1.5rem; }
     }
 
     /* ── Cards ── */
     .card {
-      background: #fff;
-      border: 1px solid #d8dde6;
-      border-radius: 10px;
-      padding: 1.4rem 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
     }
-    .card-title {
-      font-size: .75rem;
+    .card-label {
+      font-size: .72rem;
       font-weight: 700;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: #6c757d;
-      margin-bottom: 1.1rem;
-      padding-bottom: .6rem;
-      border-bottom: 1px solid #e9ecef;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
     }
 
-    /* ── Form elements ── */
-    .field { margin-bottom: 1.1rem; }
+    /* ── Form ── */
+    .field { margin-bottom: 1.2rem; }
     .field:last-child { margin-bottom: 0; }
     label {
       display: block;
-      font-size: .8rem;
+      font-size: .82rem;
       font-weight: 600;
-      color: #495057;
-      margin-bottom: .35rem;
-      letter-spacing: .02em;
+      color: var(--text);
+      margin-bottom: .4rem;
     }
-    label .opt { font-weight: 400; color: #adb5bd; font-size: .75rem; }
-    input[type="text"], input[type="number"], textarea {
+    label .opt { font-weight: 400; color: var(--text-muted); font-size: .75rem; }
+    input[type="text"], input[type="number"] {
       width: 100%;
-      border: 1px solid #c8d0da;
-      border-radius: 6px;
-      padding: .55rem .75rem;
-      font-size: .95rem;
+      border: 2px solid var(--border-strong);
+      border-radius: 10px;
+      padding: .65rem .9rem;
+      font-size: 1rem;
       font-family: inherit;
-      color: #1a1a2e;
-      background: #fdfdfe;
+      color: var(--text);
+      background: var(--bg);
       transition: border-color .15s, box-shadow .15s;
       outline: none;
     }
-    input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
-      border-color: #003366;
-      box-shadow: 0 0 0 3px rgba(0,51,102,.12);
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.1);
     }
-    input.error, textarea.error { border-color: #dc3545; }
-    .field-error {
-      font-size: .78rem;
-      color: #dc3545;
-      margin-top: .3rem;
-      display: none;
-    }
+    input.error { border-color: var(--error); }
+    .field-error { font-size: .78rem; color: var(--error); margin-top: .3rem; display: none; }
     .field-error.visible { display: block; }
-    .char-counter {
-      font-size: .75rem;
-      color: #adb5bd;
-      text-align: right;
-      margin-top: .25rem;
-    }
-    .char-counter.warn { color: #e67e22; }
-    .char-counter.over { color: #dc3545; }
+    .char-counter { font-size: .72rem; color: var(--text-muted); text-align: right; margin-top: .25rem; }
+    .char-counter.warn { color: var(--warning); }
+    .char-counter.over { color: var(--error); }
 
-    /* Amount input with EUR prefix */
-    .amount-wrap {
-      display: flex;
-      align-items: stretch;
-    }
+    .amount-wrap { display: flex; align-items: stretch; }
     .amount-prefix {
-      background: #e9ecef;
-      border: 1px solid #c8d0da;
+      background: var(--surface);
+      border: 2px solid var(--border-strong);
       border-right: none;
-      border-radius: 6px 0 0 6px;
-      padding: .55rem .75rem;
-      font-size: .95rem;
-      font-weight: 600;
-      color: #495057;
+      border-radius: 10px 0 0 10px;
+      padding: .65rem .9rem;
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text-secondary);
       display: flex;
       align-items: center;
     }
-    .amount-wrap input {
-      border-radius: 0 6px 6px 0;
-      flex: 1;
-    }
+    .amount-wrap input { border-radius: 0 10px 10px 0; }
 
     /* ── Buttons ── */
     .btn {
@@ -185,146 +240,279 @@
       justify-content: center;
       gap: .45rem;
       border: none;
-      border-radius: 7px;
-      padding: .65rem 1.4rem;
-      font-size: .95rem;
+      border-radius: 10px;
+      padding: .75rem 1.5rem;
+      font-size: .9rem;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
-      transition: background .15s, transform .08s, box-shadow .15s;
+      transition: all .15s;
     }
     .btn:active { transform: scale(.97); }
     .btn-primary {
-      background: #003366;
+      background: var(--primary);
       color: #fff;
-      box-shadow: 0 2px 6px rgba(0,51,102,.3);
+      box-shadow: 0 2px 8px rgba(37,99,235,.25);
     }
-    .btn-primary:hover { background: #004080; }
-    .btn-primary:disabled { background: #8da9c4; cursor: not-allowed; box-shadow: none; transform: none; }
-    .btn-secondary {
-      background: #e9ecef;
-      color: #495057;
-    }
-    .btn-secondary:hover { background: #dee2e6; }
-    .btn-danger {
-      background: #fff;
-      color: #dc3545;
-      border: 1px solid #dc3545;
-    }
-    .btn-danger:hover { background: #fff5f5; }
-    .btn-sm { padding: .4rem .9rem; font-size: .82rem; }
+    .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 4px 12px rgba(37,99,235,.3); }
+    .btn-secondary { background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border-strong); }
+    .btn-secondary:hover { background: var(--border); }
+    .btn-danger { background: #FEF2F2; color: var(--error); }
+    .btn-danger:hover { background: #FEE2E2; }
+    .btn-sm { padding: .45rem .9rem; font-size: .8rem; }
     .btn-full { width: 100%; }
 
-    /* ── QR card ── */
+    /* ── QR ── */
     #qr-card { text-align: center; }
     #qr-placeholder {
-      border: 2px dashed #c8d0da;
-      border-radius: 8px;
-      padding: 2.5rem 1rem;
-      color: #adb5bd;
-      font-size: .9rem;
-      margin-bottom: 1rem;
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: .88rem;
     }
+    #qr-placeholder svg { display: block; margin: 0 auto .75rem; opacity: .3; }
     #qrcode {
       display: inline-block;
-      padding: 12px;
+      padding: 16px;
       background: #fff;
-      border: 1px solid #dee2e6;
-      border-radius: 6px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
       margin-bottom: 1rem;
     }
     #qrcode img, #qrcode canvas { display: block; }
 
-    /* ── Transfer summary ── */
-    #summary {
-      display: none;
-      margin-top: 1rem;
-    }
+    #summary { display: none; margin-top: 1rem; }
     #summary.visible { display: block; }
     dl.summary-list {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: .35rem .75rem;
-      font-size: .88rem;
-      border-top: 1px solid #e9ecef;
+      gap: .4rem .85rem;
+      font-size: .85rem;
+      border-top: 1px solid var(--border);
       padding-top: .85rem;
       margin-top: .85rem;
+      text-align: left;
     }
-    dl.summary-list dt {
-      font-weight: 600;
-      color: #6c757d;
-      white-space: nowrap;
-    }
-    dl.summary-list dd {
-      color: #1a1a2e;
-      word-break: break-all;
-      font-family: 'Courier New', monospace;
-      font-size: .85rem;
-    }
-    dl.summary-list dd.amount-val {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #003366;
-      font-family: inherit;
-    }
+    dl.summary-list dt { font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+    dl.summary-list dd { color: var(--text); word-break: break-all; font-family: monospace; font-size: .82rem; }
+    dl.summary-list dd.amount-val { font-size: 1.05rem; font-weight: 700; color: var(--primary); font-family: inherit; }
+    .qr-actions { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin-top: .85rem; }
 
-    /* Print button row */
-    .qr-actions {
-      display: flex;
-      gap: .6rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: .75rem;
-    }
-
-    /* ── Settings view ── */
+    /* ── Settings ── */
     #view-settings .card { max-width: 520px; margin: 0 auto; }
-    .settings-actions {
+    .settings-actions { display: flex; gap: .6rem; margin-top: 1.5rem; flex-wrap: wrap; }
+
+    /* ── How it works ── */
+    #view-how { max-width: 680px; margin: 0 auto; }
+    .how-hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .how-hero h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: .5rem;
+    }
+    .how-hero p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .how-hero .highlight {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Two-column: You / Payer */
+    .how-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 540px) { .how-columns { grid-template-columns: 1fr; } }
+    .how-col {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .how-col-header {
       display: flex;
-      gap: .7rem;
-      margin-top: 1.4rem;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .how-col-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .how-col-icon svg { width: 18px; height: 18px; }
+    .how-col-icon.you { background: var(--primary-light); color: var(--primary); }
+    .how-col-icon.payer { background: #ECFDF5; color: var(--accent); }
+    .how-col-label {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .how-steps { list-style: none; }
+    .how-steps li {
+      position: relative;
+      padding: .6rem 0 .6rem 2rem;
+      font-size: .88rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .how-steps li + li { border-top: 1px solid var(--border); }
+    .how-steps li::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 0;
+      top: .65rem;
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      font-size: .7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .how-col:first-child .how-steps li::before { background: var(--primary-light); color: var(--primary); }
+    .how-col:last-child .how-steps li::before { background: #ECFDF5; color: var(--accent); }
+    .how-steps .step-detail {
+      display: block;
+      font-size: .78rem;
+      color: var(--text-secondary);
+      margin-top: .15rem;
+    }
+    .how-section-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: .35rem;
+    }
+
+    /* Banking apps section */
+    .banking-info {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .banking-info-title {
+      font-size: .88rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+    .banking-info p {
+      font-size: .85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: .75rem;
+    }
+    .banking-info p:last-child { margin-bottom: 0; }
+    .app-names {
+      display: flex;
       flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: .5rem;
+    }
+    .app-name {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .25rem .6rem;
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .features-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .5rem 1rem;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .feature-pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
     }
 
     /* ── Footer ── */
     footer {
       text-align: center;
-      font-size: .75rem;
-      color: #adb5bd;
-      padding: 1.5rem 1rem;
+      font-size: .72rem;
+      color: var(--text-muted);
+      padding: 2rem 1rem;
     }
 
-    /* ── Print styles ── */
     @media print {
-      header, footer, #view-transfer .card:first-child,
-      .qr-actions, #btn-settings, #banner-setup { display: none !important; }
+      nav, footer, .hero-card, .qr-actions, #banner-setup { display: none !important; }
       body { background: #fff; }
       .transfer-grid { display: block; }
       #qr-card { box-shadow: none; border: none; }
       #summary { display: block !important; }
-      dl.summary-list dt { color: #333; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Transfer<span>Snap</span></h1>
-  <button id="btn-settings" onclick="toggleSettings()">&#9881; Settings</button>
-</header>
+<nav>
+  <a class="logo" onclick="showView('transfer')" style="cursor:pointer;text-decoration:none">transfer<span>snap</span></a>
+  <div class="nav-right">
+    <button class="nav-link" onclick="showView('how')">How it works</button>
+    <div class="nav-sep"></div>
+    <button class="nav-icon-btn" id="btn-settings" onclick="showView('settings')" aria-label="Settings">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+    </button>
+  </div>
+</nav>
 
 <main>
-  <div id="banner-setup">
-    Beneficiary details not configured. <a onclick="toggleSettings()">Open Settings</a> to enter IBAN and name.
+  <div id="banner-setup" style="display:none">
+    <span>Set up your beneficiary details to get started.</span>
+    <a onclick="showView('settings')">Open Settings</a>
   </div>
 
-  <!-- ══ Transfer View ══ -->
-  <div id="view-transfer" class="active">
+  <!-- ══ Transfer ══ -->
+  <div id="view-transfer" class="view active">
+    <div class="hero-card">
+      <div class="hero-title">Get paid via bank transfer.</div>
+      <div class="hero-sub">Generate a QR code. The payer scans it with their banking app and sends you money instantly via SEPA.</div>
+    </div>
     <div class="transfer-grid">
-
-      <!-- Left: Input form -->
       <div class="card">
-        <div class="card-title">New Transfer</div>
-
+        <div class="card-label">Payment Details</div>
         <div class="field">
           <label for="inp-amount">Amount</label>
           <div class="amount-wrap">
@@ -333,303 +521,219 @@
           </div>
           <div class="field-error" id="err-amount">Please enter a valid amount (max EUR 999,999,999.99).</div>
         </div>
-
         <div class="field">
-          <label for="inp-reason">Reason / Reference</label>
+          <label for="inp-reason">Reference <span class="opt">(optional)</span></label>
           <input type="text" id="inp-reason" placeholder="e.g. Invoice 2024-001" maxlength="140">
           <div class="char-counter"><span id="reason-count">0</span> / 140</div>
           <div class="field-error" id="err-reason">Maximum 140 characters.</div>
         </div>
-
-        <div class="field" style="margin-top:1.4rem">
-          <button class="btn btn-primary btn-full" id="btn-generate" onclick="generate()">
-            &#9654; Generate QR Code
-          </button>
+        <div class="field" style="margin-top:1.5rem">
+          <button class="btn btn-primary btn-full" onclick="generate()">Generate QR Code</button>
         </div>
       </div>
 
-      <!-- Right: QR code + summary -->
       <div class="card" id="qr-card">
-        <div class="card-title">QR Code</div>
-        <div id="qr-placeholder">Fill in the form and click<br><strong>Generate QR Code</strong></div>
+        <div class="card-label">Your QR Code</div>
+        <div id="qr-placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" /></svg>
+          Enter an amount and generate your code
+        </div>
         <div id="qrcode" style="display:none"></div>
-
         <div id="summary">
           <dl class="summary-list">
-            <dt>Recipient</dt><dd id="sum-name">—</dd>
-            <dt>IBAN</dt><dd id="sum-iban">—</dd>
-            <dt>BIC</dt><dd id="sum-bic">—</dd>
-            <dt>Amount</dt><dd id="sum-amount" class="amount-val">—</dd>
-            <dt>Reason</dt><dd id="sum-reason">—</dd>
+            <dt>Recipient</dt><dd id="sum-name"></dd>
+            <dt>IBAN</dt><dd id="sum-iban"></dd>
+            <dt>BIC</dt><dd id="sum-bic"></dd>
+            <dt>Amount</dt><dd id="sum-amount" class="amount-val"></dd>
+            <dt>Reference</dt><dd id="sum-reason"></dd>
           </dl>
           <div class="qr-actions">
-            <button class="btn btn-secondary btn-sm" onclick="window.print()">&#128438; Print</button>
-            <button class="btn btn-secondary btn-sm" onclick="resetForm()">&#x21BA; New Transfer</button>
+            <button class="btn btn-secondary btn-sm" onclick="resetForm()">New Transfer</button>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- ══ Settings View ══ -->
-  <div id="view-settings">
-    <div class="card">
-      <div class="card-title">Beneficiary Settings</div>
-      <p style="font-size:.85rem;color:#6c757d;margin-bottom:1.2rem;">
-        These details are saved locally on this device and pre-filled into every transfer.
-      </p>
+  <!-- ══ How it works ══ -->
+  <div id="view-how" class="view">
+    <div class="how-hero">
+      <h2>How TransferSnap works</h2>
+      <p>The payer scans your QR code with their <span class="highlight">banking app</span> and sends you money directly via <span class="highlight">SEPA Instant Payment</span>. No middleman, no extra app — just a real bank transfer from their account to yours.</p>
+    </div>
 
+    <div class="how-columns">
+      <div class="how-col">
+        <div class="how-col-header">
+          <div class="how-col-icon you">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+          </div>
+          <div class="how-col-label">You (the receiver)</div>
+        </div>
+
+        <div class="how-section-label">One-time setup</div>
+        <ol class="how-steps">
+          <li data-step="1">
+            Save your name and IBAN in Settings
+            <span class="step-detail">Stored locally on your device. You only do this once.</span>
+          </li>
+        </ol>
+
+        <div class="how-section-label" style="margin-top:1rem">For each payment</div>
+        <ol class="how-steps">
+          <li data-step="2">
+            Enter amount and reference
+            <span class="step-detail">E.g. EUR 42.50 for "Invoice 2024-003".</span>
+          </li>
+          <li data-step="3">
+            Show the QR code to the payer
+            <span class="step-detail">On your screen or as a screenshot.</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="how-col">
+        <div class="how-col-header">
+          <div class="how-col-icon payer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+          </div>
+          <div class="how-col-label">The payer</div>
+        </div>
+        <ol class="how-steps">
+          <li data-step="1">
+            Open their banking app
+            <span class="step-detail">No extra app needed — they use their regular bank.</span>
+          </li>
+          <li data-step="2">
+            Start a new transfer and scan the QR code
+            <span class="step-detail">Your IBAN, the amount, and reference are filled in automatically.</span>
+          </li>
+          <li data-step="3">
+            Confirm and send instantly
+            <span class="step-detail">The money is transferred directly to your bank account via SEPA Instant Payment. The payer may need to activate instant payments in their banking app first.</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="banking-info">
+      <div class="banking-info-title">Where to find the QR scanner in banking apps</div>
+      <p>Most European banking apps support scanning EPC QR codes. The feature is usually found under names like:</p>
+      <div class="app-names">
+        <span class="app-name">Scan &amp; Transfer</span>
+        <span class="app-name">QR Payment</span>
+        <span class="app-name">Foto-Überweisung</span>
+        <span class="app-name">Scan to Pay</span>
+        <span class="app-name">QR-Code scannen</span>
+        <span class="app-name">Zahlung per QR-Code</span>
+      </div>
+      <p style="margin-top:.75rem">The payer doesn't need to install anything — they just use their existing banking app. The QR code follows the <strong>EPC QR standard (v002)</strong>, supported across 36 SEPA countries.</p>
+    </div>
+
+    <div class="features-row">
+      <div class="feature-pill"><span class="dot"></span> Direct bank-to-bank</div>
+      <div class="feature-pill"><span class="dot"></span> SEPA Instant Payment</div>
+      <div class="feature-pill"><span class="dot"></span> No middleman</div>
+      <div class="feature-pill"><span class="dot"></span> Works offline</div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem;">
+      <button class="btn btn-primary" onclick="showView('transfer')">Get paid now</button>
+    </div>
+  </div>
+
+  <!-- ══ Settings ══ -->
+  <div id="view-settings" class="view">
+    <div class="card">
+      <div class="card-label">Beneficiary Settings</div>
+      <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:1.25rem;line-height:1.5;">
+        Your payment details are stored in your browser only. They're embedded into each QR code.
+      </p>
       <div class="field">
         <label for="set-name">Beneficiary Name</label>
         <input type="text" id="set-name" placeholder="e.g. John Doe" maxlength="70">
         <div class="field-error" id="err-set-name">Name is required (max 70 characters).</div>
       </div>
-
       <div class="field">
         <label for="set-iban">IBAN</label>
         <input type="text" id="set-iban" placeholder="e.g. DE89370400440532013000" maxlength="34" style="text-transform:uppercase">
         <div class="field-error" id="err-set-iban">Enter a valid IBAN (2 letters + up to 32 alphanumeric characters).</div>
       </div>
-
       <div class="field">
         <label for="set-bic">BIC / SWIFT <span class="opt">(optional)</span></label>
         <input type="text" id="set-bic" placeholder="e.g. COBADEFFXXX" maxlength="11" style="text-transform:uppercase">
         <div class="field-error" id="err-set-bic">BIC must be 8 or 11 characters.</div>
       </div>
-
       <div class="settings-actions">
-        <button class="btn btn-primary" onclick="saveSettings()">&#10003; Save Settings</button>
-        <button class="btn btn-secondary" onclick="toggleSettings()">Cancel</button>
-        <button class="btn btn-danger btn-sm" onclick="clearSettings()" style="margin-left:auto">Clear All Data</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        <button class="btn btn-secondary" onclick="showView('transfer')">Cancel</button>
+        <button class="btn btn-danger btn-sm" onclick="clearSettings()" style="margin-left:auto">Clear All</button>
       </div>
     </div>
   </div>
 </main>
 
-<footer>
-  TransferSnap &mdash; EPC QR Code v002 &middot; SEPA Credit Transfer &middot; All data stays on your device
-</footer>
+<footer>TransferSnap &mdash; EPC QR Code v002 &middot; SEPA Credit Transfer</footer>
 
 <script src="qrcode.min.js"></script>
 <script>
-  // ── Config keys ──
-  const KEY_NAME = 'gc_name';
-  const KEY_IBAN = 'gc_iban';
-  const KEY_BIC  = 'gc_bic';
+  const KEY_NAME='gc_name',KEY_IBAN='gc_iban',KEY_BIC='gc_bic';
+  let currentQR=null;
 
-  let currentQR = null;
-
-  // ── Init ──
-  document.addEventListener('DOMContentLoaded', () => {
-    loadSettingsIntoForm();
-    updateBanner();
-    wireReasonCounter();
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
+  document.addEventListener('DOMContentLoaded',()=>{
+    loadSettingsIntoForm();updateBanner();wireReasonCounter();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 
-  // ── View toggle ──
-  function toggleSettings() {
-    const isSettings = document.getElementById('view-settings').classList.contains('active');
-    document.getElementById('view-transfer').classList.toggle('active', isSettings);
-    document.getElementById('view-settings').classList.toggle('active', !isSettings);
-    document.getElementById('btn-settings').textContent = isSettings ? '⚙ Settings' : '✕ Close';
-    if (!isSettings) loadSettingsIntoForm();
+  function showView(name){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+name).classList.add('active');
   }
 
-  // ── Reason counter ──
-  function wireReasonCounter() {
-    const inp = document.getElementById('inp-reason');
-    const counter = document.getElementById('reason-count');
-    inp.addEventListener('input', () => {
-      const len = inp.value.length;
-      counter.textContent = len;
-      const wrap = counter.parentElement;
-      wrap.className = 'char-counter' + (len > 130 ? (len >= 140 ? ' over' : ' warn') : '');
-    });
+  function wireReasonCounter(){const i=document.getElementById('inp-reason'),c=document.getElementById('reason-count');i.addEventListener('input',()=>{const l=i.value.length;c.textContent=l;c.parentElement.className='char-counter'+(l>130?(l>=140?' over':' warn'):'');});}
+  function updateBanner(){document.getElementById('banner-setup').style.display=localStorage.getItem(KEY_IBAN)&&localStorage.getItem(KEY_NAME)?'none':'flex';}
+  function loadSettingsIntoForm(){document.getElementById('set-name').value=localStorage.getItem(KEY_NAME)||'';document.getElementById('set-iban').value=localStorage.getItem(KEY_IBAN)||'';document.getElementById('set-bic').value=localStorage.getItem(KEY_BIC)||'';}
+
+  function saveSettings(){
+    const name=document.getElementById('set-name').value.trim(),iban=document.getElementById('set-iban').value.trim().toUpperCase().replace(/\s/g,''),bic=document.getElementById('set-bic').value.trim().toUpperCase().replace(/\s/g,'');
+    let v=true;
+    if(!name||name.length>70){showError('err-set-name','set-name');v=false;}else hideError('err-set-name','set-name');
+    if(!/^[A-Z]{2}[A-Z0-9]{13,32}$/.test(iban)){showError('err-set-iban','set-iban');v=false;}else hideError('err-set-iban','set-iban');
+    if(bic&&!/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(bic)){showError('err-set-bic','set-bic');v=false;}else hideError('err-set-bic','set-bic');
+    if(!v)return;
+    localStorage.setItem(KEY_NAME,name);localStorage.setItem(KEY_IBAN,iban);
+    bic?localStorage.setItem(KEY_BIC,bic):localStorage.removeItem(KEY_BIC);
+    updateBanner();showView('transfer');
   }
 
-  // ── Banner ──
-  function updateBanner() {
-    const configured = localStorage.getItem(KEY_IBAN) && localStorage.getItem(KEY_NAME);
-    document.getElementById('banner-setup').style.display = configured ? 'none' : 'block';
+  function clearSettings(){if(!confirm('Clear all stored beneficiary data?'))return;localStorage.removeItem(KEY_NAME);localStorage.removeItem(KEY_IBAN);localStorage.removeItem(KEY_BIC);loadSettingsIntoForm();updateBanner();}
+
+  function buildGiroCode({bic,name,iban,amount,reason}){return['BCD','002','1','SCT',bic||'',name.trim().slice(0,70),iban.trim().toUpperCase(),amount?'EUR'+parseFloat(amount).toFixed(2):'','','',reason.trim().slice(0,140),''].join('\n');}
+
+  function generate(){
+    const ar=document.getElementById('inp-amount').value,r=document.getElementById('inp-reason').value.trim();
+    const n=localStorage.getItem(KEY_NAME),ib=localStorage.getItem(KEY_IBAN),bi=localStorage.getItem(KEY_BIC)||'';
+    if(!n||!ib){showView('settings');return;}
+    let v=true;const a=parseFloat(ar);
+    if(!ar||isNaN(a)||a<=0||a>999999999.99){showError('err-amount','inp-amount');v=false;}
+    else if(!/^\d+(\.\d{1,2})?$/.test(ar.trim())){showError('err-amount','inp-amount');v=false;}
+    else hideError('err-amount','inp-amount');
+    if(r.length>140){document.getElementById('err-reason').textContent='Maximum 140 characters.';showError('err-reason','inp-reason');v=false;}else hideError('err-reason','inp-reason');
+    if(!v)return;
+    const p=buildGiroCode({bic:bi,name:n,iban:ib,amount:ar,reason:r});
+    if(new TextEncoder().encode(p).length>331){showError('err-reason','inp-reason');document.getElementById('err-reason').textContent='Payload exceeds 331-byte EPC limit. Shorten the reference.';return;}
+    const c=document.getElementById('qrcode');c.innerHTML='';
+    document.getElementById('qr-placeholder').style.display='none';c.style.display='inline-block';
+    currentQR=new QRCode(c,{text:p,width:256,height:256,correctLevel:QRCode.CorrectLevel.M});
+    document.getElementById('sum-name').textContent=n;document.getElementById('sum-iban').textContent=formatIBAN(ib);
+    document.getElementById('sum-bic').textContent=bi||'\u2014';document.getElementById('sum-amount').textContent='EUR '+parseFloat(ar).toFixed(2);
+    document.getElementById('sum-reason').textContent=r||'\u2014';document.getElementById('summary').classList.add('visible');
   }
 
-  // ── Settings ──
-  function loadSettingsIntoForm() {
-    document.getElementById('set-name').value = localStorage.getItem(KEY_NAME) || '';
-    document.getElementById('set-iban').value = localStorage.getItem(KEY_IBAN) || '';
-    document.getElementById('set-bic').value  = localStorage.getItem(KEY_BIC)  || '';
-  }
-
-  function saveSettings() {
-    const name = document.getElementById('set-name').value.trim();
-    const iban = document.getElementById('set-iban').value.trim().toUpperCase().replace(/\s/g,'');
-    const bic  = document.getElementById('set-bic').value.trim().toUpperCase().replace(/\s/g,'');
-
-    let valid = true;
-
-    // Name
-    if (!name || name.length > 70) {
-      showError('err-set-name', 'set-name'); valid = false;
-    } else {
-      hideError('err-set-name', 'set-name');
-    }
-
-    // IBAN: 2 letters + 13–32 alphanumeric = 15–34 total
-    if (!(/^[A-Z]{2}[A-Z0-9]{13,32}$/.test(iban))) {
-      showError('err-set-iban', 'set-iban'); valid = false;
-    } else {
-      hideError('err-set-iban', 'set-iban');
-    }
-
-    // BIC: optional but if provided must be 8 or 11 chars
-    if (bic && !(/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(bic))) {
-      showError('err-set-bic', 'set-bic'); valid = false;
-    } else {
-      hideError('err-set-bic', 'set-bic');
-    }
-
-    if (!valid) return;
-
-    localStorage.setItem(KEY_NAME, name);
-    localStorage.setItem(KEY_IBAN, iban);
-    if (bic) localStorage.setItem(KEY_BIC, bic);
-    else localStorage.removeItem(KEY_BIC);
-
-    updateBanner();
-    toggleSettings();
-  }
-
-  function clearSettings() {
-    if (!confirm('Clear all stored beneficiary data from this device?')) return;
-    localStorage.removeItem(KEY_NAME);
-    localStorage.removeItem(KEY_IBAN);
-    localStorage.removeItem(KEY_BIC);
-    loadSettingsIntoForm();
-    updateBanner();
-  }
-
-  // ── GiroCode payload builder (EPC QR v002) ──
-  function buildGiroCode({ bic, name, iban, amount, reason }) {
-    const lines = [
-      'BCD',
-      '002',
-      '1',   // 1 = UTF-8 per EPC QR Code Guidelines v3.0
-      'SCT',
-      bic || '',
-      name.trim().slice(0, 70),
-      iban.trim().toUpperCase(),
-      amount ? 'EUR' + parseFloat(amount).toFixed(2) : '',
-      '',   // Purpose code
-      '',   // Structured remittance reference
-      reason.trim().slice(0, 140),
-      ''    // Originator-to-beneficiary info
-    ];
-    return lines.join('\n');
-  }
-
-  // ── Generate ──
-  function generate() {
-    const amountRaw = document.getElementById('inp-amount').value;
-    const reason    = document.getElementById('inp-reason').value.trim();
-
-    const name = localStorage.getItem(KEY_NAME);
-    const iban = localStorage.getItem(KEY_IBAN);
-    const bic  = localStorage.getItem(KEY_BIC) || '';
-
-    if (!name || !iban) {
-      toggleSettings();
-      return;
-    }
-
-    let valid = true;
-
-    // Validate amount
-    const amount = parseFloat(amountRaw);
-    if (!amountRaw || isNaN(amount) || amount <= 0 || amount > 999999999.99) {
-      showError('err-amount', 'inp-amount'); valid = false;
-    } else {
-      // Check max 2 decimal places
-      if (!/^\d+(\.\d{1,2})?$/.test(amountRaw.trim())) {
-        showError('err-amount', 'inp-amount'); valid = false;
-      } else {
-        hideError('err-amount', 'inp-amount');
-      }
-    }
-
-    // Validate reason length
-    if (reason.length > 140) {
-      document.getElementById('err-reason').textContent = 'Maximum 140 characters.';
-      showError('err-reason', 'inp-reason'); valid = false;
-    } else {
-      hideError('err-reason', 'inp-reason');
-    }
-
-    if (!valid) return;
-
-    const payload = buildGiroCode({ bic, name, iban, amount: amountRaw, reason });
-
-    // EPC spec caps payload at 331 bytes (UTF-8 encoded)
-    if (new TextEncoder().encode(payload).length > 331) {
-      showError('err-reason', 'inp-reason');
-      document.getElementById('err-reason').textContent =
-        'Combined payload exceeds 331-byte EPC limit. Shorten the reason.';
-      return;
-    }
-
-    // Render QR
-    const container = document.getElementById('qrcode');
-    container.innerHTML = '';
-    if (currentQR) { currentQR = null; }
-
-    document.getElementById('qr-placeholder').style.display = 'none';
-    container.style.display = 'inline-block';
-
-    currentQR = new QRCode(container, {
-      text: payload,
-      width: 256,
-      height: 256,
-      correctLevel: QRCode.CorrectLevel.M
-    });
-
-    // Populate summary
-    document.getElementById('sum-name').textContent   = name;
-    document.getElementById('sum-iban').textContent   = formatIBAN(iban);
-    document.getElementById('sum-bic').textContent    = bic || '—';
-    document.getElementById('sum-amount').textContent = 'EUR ' + parseFloat(amountRaw).toFixed(2);
-    document.getElementById('sum-reason').textContent = reason || '—';
-
-    document.getElementById('summary').classList.add('visible');
-  }
-
-  function resetForm() {
-    document.getElementById('inp-amount').value = '';
-    document.getElementById('inp-reason').value = '';
-    document.getElementById('reason-count').textContent = '0';
-    document.getElementById('qrcode').style.display = 'none';
-    document.getElementById('qrcode').innerHTML = '';
-    document.getElementById('qr-placeholder').style.display = '';
-    document.getElementById('summary').classList.remove('visible');
-    currentQR = null;
-  }
-
-  // ── Helpers ──
-  function showError(errId, inputId) {
-    document.getElementById(errId).classList.add('visible');
-    document.getElementById(inputId).classList.add('error');
-  }
-  function hideError(errId, inputId) {
-    document.getElementById(errId).classList.remove('visible');
-    document.getElementById(inputId).classList.remove('error');
-  }
-
-  function formatIBAN(iban) {
-    return iban.replace(/(.{4})/g, '$1 ').trim();
-  }
+  function resetForm(){document.getElementById('inp-amount').value='';document.getElementById('inp-reason').value='';document.getElementById('reason-count').textContent='0';document.getElementById('qrcode').style.display='none';document.getElementById('qrcode').innerHTML='';document.getElementById('qr-placeholder').style.display='';document.getElementById('summary').classList.remove('visible');currentQR=null;}
+  function showError(e,i){document.getElementById(e).classList.add('visible');document.getElementById(i).classList.add('error');}
+  function hideError(e,i){document.getElementById(e).classList.remove('visible');document.getElementById(i).classList.remove('error');}
+  function formatIBAN(s){return s.replace(/(.{4})/g,'$1 ').trim();}
 </script>
 </body>
 </html>
