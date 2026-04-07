@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GiroCode Generator</title>
+  <title>TransferPay</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#003366">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="GiroCode">
+  <meta name="apple-mobile-web-app-title" content="TransferPay">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -308,7 +308,7 @@
 <body>
 
 <header>
-  <h1>GiroCode <span>Generator</span></h1>
+  <h1>Transfer<span>Pay</span></h1>
   <button id="btn-settings" onclick="toggleSettings()">&#9881; Settings</button>
 </header>
 
@@ -350,7 +350,7 @@
 
       <!-- Right: QR code + summary -->
       <div class="card" id="qr-card">
-        <div class="card-title">GiroCode</div>
+        <div class="card-title">QR Code</div>
         <div id="qr-placeholder">Fill in the form and click<br><strong>Generate QR Code</strong></div>
         <div id="qrcode" style="display:none"></div>
 
@@ -377,7 +377,7 @@
     <div class="card">
       <div class="card-title">Beneficiary Settings</div>
       <p style="font-size:.85rem;color:#6c757d;margin-bottom:1.2rem;">
-        These details are saved locally on this device and pre-filled into every GiroCode.
+        These details are saved locally on this device and pre-filled into every transfer.
       </p>
 
       <div class="field">
@@ -408,7 +408,7 @@
 </main>
 
 <footer>
-  GiroCode Generator &mdash; EPC QR Code v002 &middot; SEPA Credit Transfer &middot; All data stays on your device
+  TransferPay &mdash; EPC QR Code v002 &middot; SEPA Credit Transfer &middot; All data stays on your device
 </footer>
 
 <script src="qrcode.min.js"></script>
