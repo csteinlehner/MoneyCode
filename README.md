@@ -4,7 +4,7 @@ A lightweight PWA for generating EPC QR codes for SEPA credit transfers. Scan th
 
 ## Live App
 
-**[https://csteinlehner.github.io/MoneyCode/](https://csteinlehner.github.io/MoneyCode/)**
+**[https://transferpay.com](https://transferpay.com)**
 
 Works offline after the first visit. Install it as an app on your phone via "Add to Home Screen".
 
