@@ -3,28 +3,28 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/fira-code@latest/latin-400-normal.woff2') format('woff2');
+  src: url('fonts/latin-400-normal.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Fira Code';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/fira-code@latest/latin-500-normal.woff2') format('woff2');
+  src: url('fonts/latin-500-normal.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Fira Code';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/fira-code@latest/latin-600-normal.woff2') format('woff2');
+  src: url('fonts/latin-600-normal.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Fira Code';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/fira-code@latest/latin-700-normal.woff2') format('woff2');
+  src: url('fonts/latin-700-normal.woff2') format('woff2');
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -481,6 +481,8 @@ dl.summary-list dd.amount-val { font-size: 1.05rem; font-weight: 700; color: var
 .imprint-content h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; }
 .imprint-content h3 { font-size: .95rem; font-weight: 700; margin-top: 1.2rem; margin-bottom: .4rem; }
 .imprint-content p { font-size: .88rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: .5rem; }
+.imprint-content ul { margin: .5rem 0; padding-left: 1.4rem; }
+.imprint-content li { font-size: .88rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: .25rem; }
 .imprint-content a { color: var(--primary); text-decoration: none; }
 .imprint-content a:hover { text-decoration: underline; }
 
