@@ -1,7 +1,7 @@
 {
-  "name": "GiroCode Generator",
-  "short_name": "GiroCode",
-  "description": "Generate EPC GiroCode QR codes for SEPA bank transfers",
+  "name": "TransferPay",
+  "short_name": "TransferPay",
+  "description": "Generate EPC QR codes for SEPA bank transfers",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

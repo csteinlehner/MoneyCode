@@ -1,4 +1,4 @@
-const CACHE = 'girocode-v1';
+const CACHE = 'transferpay-v1';
 const FILES = [
   './',
   './index.html',
