@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How it works — TransferSnap</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563EB">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TransferSnap">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="./" style="text-decoration:none">transfer<span>snap</span></a>
+  <div class="nav-right">
+    <a class="nav-link" href="how.html">How it works</a>
+    <div class="nav-sep"></div>
+    <a class="nav-icon-btn" href="./#settings" aria-label="Settings">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+    </a>
+  </div>
+</nav>
+
+<main>
+  <div class="how-content">
+    <div class="how-hero">
+      <h2>How TransferSnap works</h2>
+      <p>The payer scans your QR code with their <span class="highlight">banking app</span> and sends you money directly via <span class="highlight">SEPA Instant Payment</span>. No middleman, no extra app — just a real bank transfer from their account to yours.</p>
+    </div>
+
+    <div class="how-columns">
+      <div class="how-col">
+        <div class="how-col-header">
+          <div class="how-col-icon you">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+          </div>
+          <div class="how-col-label">You (the receiver)</div>
+        </div>
+
+        <div class="how-section-label">One-time setup</div>
+        <ol class="how-steps">
+          <li data-step="1">
+            Save your name and IBAN in Settings
+            <span class="step-detail">Stored locally on your device. You only do this once.</span>
+          </li>
+        </ol>
+
+        <div class="how-section-label" style="margin-top:1rem">For each payment</div>
+        <ol class="how-steps">
+          <li data-step="2">
+            Enter amount and reference
+            <span class="step-detail">E.g. EUR 42.50 for "Invoice 2024-003".</span>
+          </li>
+          <li data-step="3">
+            Show the QR code to the payer
+            <span class="step-detail">On your screen or as a screenshot.</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="how-col">
+        <div class="how-col-header">
+          <div class="how-col-icon payer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+          </div>
+          <div class="how-col-label">The payer</div>
+        </div>
+        <ol class="how-steps">
+          <li data-step="1">
+            Open their banking app
+            <span class="step-detail">No extra app needed — they use their regular bank.</span>
+          </li>
+          <li data-step="2">
+            Start a new transfer and scan the QR code
+            <span class="step-detail">Your IBAN, the amount, and reference are filled in automatically.</span>
+          </li>
+          <li data-step="3">
+            Confirm and send instantly
+            <span class="step-detail">The money is transferred directly to your bank account via SEPA Instant Payment. The payer may need to activate instant payments in their banking app first.</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="banking-info">
+      <div class="banking-info-title">Where to find the QR scanner in banking apps</div>
+      <p>Most European banking apps support scanning EPC QR codes. The feature is usually found under names like:</p>
+      <div class="app-names">
+        <span class="app-name">Scan &amp; Transfer</span>
+        <span class="app-name">QR Payment</span>
+        <span class="app-name">Foto-Überweisung</span>
+        <span class="app-name">Scan to Pay</span>
+        <span class="app-name">QR-Code scannen</span>
+        <span class="app-name">Zahlung per QR-Code</span>
+      </div>
+      <p style="margin-top:.75rem">The payer doesn't need to install anything — they just use their existing banking app. The QR code follows the <strong>EPC QR standard (v002)</strong>, supported across 36 SEPA countries.</p>
+    </div>
+
+    <div class="features-row">
+      <div class="feature-pill"><span class="dot"></span> Direct bank-to-bank</div>
+      <div class="feature-pill"><span class="dot"></span> SEPA Instant Payment</div>
+      <div class="feature-pill"><span class="dot"></span> No middleman</div>
+      <div class="feature-pill"><span class="dot"></span> Works offline</div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem;">
+      <a class="btn btn-primary" href="./">Get paid now</a>
+    </div>
+  </div>
+</main>
+
+<footer>&copy; 2026 TransferSnap &middot; <a href="imprint.html">Imprint</a></footer>
+
+</body>
+</html>
