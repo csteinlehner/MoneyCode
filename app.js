@@ -37,10 +37,11 @@ function saveSettings(){
   if(name!==rawName){document.getElementById('set-name').value=name;showToast('Name adjusted for SEPA compatibility');}
   localStorage.setItem(KEY_NAME,name);localStorage.setItem(KEY_IBAN,iban);
   bic?localStorage.setItem(KEY_BIC,bic):localStorage.removeItem(KEY_BIC);
+  if(typeof umami!=='undefined')umami.track('settings-saved');
   updateBanner();showView('transfer');
 }
 
-function clearSettings(){if(!confirm('Clear all stored beneficiary data?'))return;localStorage.removeItem(KEY_NAME);localStorage.removeItem(KEY_IBAN);localStorage.removeItem(KEY_BIC);loadSettingsIntoForm();updateBanner();}
+function clearSettings(){if(!confirm('Clear all stored beneficiary data?'))return;localStorage.removeItem(KEY_NAME);localStorage.removeItem(KEY_IBAN);localStorage.removeItem(KEY_BIC);if(typeof umami!=='undefined')umami.track('settings-cleared');loadSettingsIntoForm();updateBanner();}
 
 function sanitizeSepa(str){
   const map={'ä':'ae','ö':'oe','ü':'ue','Ä':'Ae','Ö':'Oe','Ü':'Ue','ß':'ss','é':'e','è':'e','ê':'e','ë':'e','á':'a','à':'a','â':'a','ó':'o','ò':'o','ô':'o','ú':'u','ù':'u','û':'u','í':'i','ì':'i','î':'i','ñ':'n','ç':'c','&':'+','€':'EUR'};
@@ -76,10 +77,11 @@ function generate(){
   document.getElementById('sum-name').textContent=n;document.getElementById('sum-iban').textContent=formatIBAN(ib);
   document.getElementById('sum-bic').textContent=bi||'\u2014';document.getElementById('sum-amount').textContent='EUR '+parseFloat(ar).toFixed(2);
   document.getElementById('sum-reason').textContent=r||'\u2014';
+  if(typeof umami!=='undefined')umami.track('qr-generated');
   document.getElementById('step-form').classList.remove('active');document.getElementById('step-qr').classList.add('active');
 }
 
-function resetForm(){document.getElementById('inp-amount').value='';document.getElementById('inp-reason').value='';document.getElementById('reason-count').textContent='0';document.getElementById('qrcode').innerHTML='';currentQR=null;document.getElementById('step-qr').classList.remove('active');document.getElementById('step-form').classList.add('active');}
+function resetForm(){if(typeof umami!=='undefined')umami.track('new-transfer');document.getElementById('inp-amount').value='';document.getElementById('inp-reason').value='';document.getElementById('reason-count').textContent='0';document.getElementById('qrcode').innerHTML='';currentQR=null;document.getElementById('step-qr').classList.remove('active');document.getElementById('step-form').classList.add('active');}
 function showError(e,i){document.getElementById(e).classList.add('visible');document.getElementById(i).classList.add('error');}
 function hideError(e,i){document.getElementById(e).classList.remove('visible');document.getElementById(i).classList.remove('error');}
 function formatIBAN(s){return s.replace(/(.{4})/g,'$1 ').trim();}

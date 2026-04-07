@@ -1,4 +1,4 @@
-const CACHE = 'transfersnap-v4';
+const CACHE = 'transfersnap-v5';
 const FILES = [
   './',
   './index.html',

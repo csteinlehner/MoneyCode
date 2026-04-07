@@ -1,11 +1,11 @@
 ---
 # MoneyCode-3u3z
 title: Split index.html into separate CSS, JS, and page files
-status: in-progress
+status: completed
 type: task
 priority: normal
 created_at: 2026-04-07T19:03:35Z
-updated_at: 2026-04-07T19:08:22Z
+updated_at: 2026-04-07T19:10:09Z
 ---
 
 ## Plan
@@ -36,3 +36,7 @@ Split the monolithic `index.html` into focused files:
 - Static pages (imprint, how) become real HTML files with their own `<head>`, shared CSS via `styles.css`, and consistent nav/footer
 - Interactive pages (transfer, settings) stay in `index.html` since they share JS state
 - No build step or bundler — just plain file references
+
+## Summary of Changes
+
+Split monolithic index.html into 5 focused files: styles.css, app.js, how.html, imprint.html, and a slimmed-down index.html. PR: #9
