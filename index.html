@@ -458,12 +458,29 @@
       background: var(--accent);
     }
 
+    /* ── Imprint ── */
+    #view-imprint { max-width: 680px; margin: 0 auto; }
+    #view-imprint .card { margin-bottom: 1.5rem; }
+    #view-imprint h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    #view-imprint h3 { font-size: .95rem; font-weight: 700; margin-top: 1.2rem; margin-bottom: .4rem; }
+    #view-imprint p { font-size: .88rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: .5rem; }
+    #view-imprint a { color: var(--primary); text-decoration: none; }
+    #view-imprint a:hover { text-decoration: underline; }
+
     /* ── Footer ── */
     footer {
       text-align: center;
       font-size: .72rem;
       color: var(--text-muted);
       padding: 2rem 1rem;
+    }
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: var(--text-secondary);
+      text-decoration: underline;
     }
 
     @media print {
@@ -662,9 +679,45 @@
       </div>
     </div>
   </div>
+
+  <!-- ══ Imprint ══ -->
+  <div id="view-imprint" class="view">
+    <div class="card">
+      <h2>Imprint</h2>
+      <p>Information pursuant to § 5 TMG (German Telemedia Act)</p>
+
+      <h3>Operator</h3>
+      <p>
+        Christoph Steinlehner<br>
+        Warthestr. 66<br>
+        12051 Berlin<br>
+        Germany
+      </p>
+
+      <h3>Contact</h3>
+      <p>
+        Email: christoph@csteinlehner.com
+      </p>
+
+      <h3>Responsible for content</h3>
+      <p>Christoph Steinlehner (address as above)</p>
+
+      <h3>Disclaimer</h3>
+      <p>
+        TransferSnap is a free tool that generates EPC QR codes for SEPA credit transfers.
+        All data is processed locally in your browser — no data is transmitted to any server.
+        We assume no liability for the correctness or completeness of the generated QR codes.
+        The payer's bank is solely responsible for executing the transfer.
+      </p>
+
+      <div style="margin-top:1.5rem;">
+        <button class="btn btn-secondary" onclick="showView('transfer')">Back</button>
+      </div>
+    </div>
+  </div>
 </main>
 
-<footer>TransferSnap &mdash; EPC QR Code v002 &middot; SEPA Credit Transfer</footer>
+<footer>TransferSnap &mdash; EPC QR Code v002 &middot; SEPA Credit Transfer &middot; <a onclick="showView('imprint')" style="cursor:pointer">Imprint</a></footer>
 
 <script src="qrcode.min.js"></script>
 <script>
