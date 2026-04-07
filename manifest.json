@@ -1,6 +1,6 @@
 {
-  "name": "TransferPay",
-  "short_name": "TransferPay",
+  "name": "TransferSnap",
+  "short_name": "TransferSnap",
   "description": "Generate EPC QR codes for SEPA bank transfers",
   "start_url": "./",
   "display": "standalone",

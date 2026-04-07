@@ -1,10 +1,10 @@
-# TransferPay
+# TransferSnap
 
 A lightweight PWA for generating EPC QR codes for SEPA credit transfers. Scan the QR code with your banking app to pre-fill transfer details — no typing IBANs by hand.
 
 ## Live App
 
-**[https://transferpay.com](https://transferpay.com)**
+**[https://transfersnap.com](https://transfersnap.com)**
 
 Works offline after the first visit. Install it as an app on your phone via "Add to Home Screen".
 

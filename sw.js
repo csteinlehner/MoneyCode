@@ -1,4 +1,4 @@
-const CACHE = 'transferpay-v1';
+const CACHE = 'transfersnap-v1';
 const FILES = [
   './',
   './index.html',

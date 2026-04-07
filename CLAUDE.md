@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TransferPay — a static PWA that generates EPC QR codes (v002) for SEPA credit transfers. No build step, no bundler, no framework. Everything runs client-side with data stored in `localStorage`.
+TransferSnap — a static PWA that generates EPC QR codes (v002) for SEPA credit transfers. No build step, no bundler, no framework. Everything runs client-side with data stored in `localStorage`.
 
 ## Architecture
 
