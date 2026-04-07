@@ -1,4 +1,4 @@
-const CACHE = 'transfersnap-v6';
+const CACHE = 'transfersnap-v7';
 const FILES = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const FILES = [
   './app.js',
   './how.html',
   './imprint.html',
+  './privacy.html',
   './manifest.json',
   './qrcode.min.js',
   './icon-192.png',
