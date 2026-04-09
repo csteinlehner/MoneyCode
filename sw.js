@@ -1,4 +1,4 @@
-const CACHE = 'transfersnap-v8';
+const CACHE = 'transfersnap-v9';
 const FILES = [
   './',
   './index.html',
@@ -14,7 +14,11 @@ const FILES = [
   './fonts/latin-400-normal.woff2',
   './fonts/latin-500-normal.woff2',
   './fonts/latin-600-normal.woff2',
-  './fonts/latin-700-normal.woff2'
+  './fonts/latin-700-normal.woff2',
+  './fonts/fira-sans-latin-400-normal.woff2',
+  './fonts/fira-sans-latin-500-normal.woff2',
+  './fonts/fira-sans-latin-600-normal.woff2',
+  './fonts/fira-sans-latin-700-normal.woff2'
 ];
 
 self.addEventListener('install', event => {
@@ -34,7 +38,24 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request))
-  );
+  const url = new URL(event.request.url);
+  const isFont = url.pathname.startsWith('/fonts/');
+
+  if (isFont) {
+    // Cache-first for fonts (they never change, only new files get added)
+    event.respondWith(
+      caches.match(event.request).then(cached => cached || fetch(event.request))
+    );
+  } else {
+    // Network-first for everything else (cache is offline fallback only)
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(CACHE).then(cache => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+  }
 });
