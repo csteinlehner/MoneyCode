@@ -106,8 +106,13 @@ nav {
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: .45rem;
 }
-.logo span { color: var(--accent-dark); }
+.logo .logo-text span { color: var(--accent-dark); }
+.logo-mark { width: 26px; height: 26px; flex-shrink: 0; }
+.logo-text { display: inline; }
 .nav-right {
   display: flex;
   align-items: center;

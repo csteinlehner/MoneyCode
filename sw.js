@@ -1,4 +1,4 @@
-const CACHE = 'transfersnap-v11';
+const CACHE = 'transfersnap-v12';
 const FILES = [
   './',
   './index.html',
@@ -12,6 +12,7 @@ const FILES = [
   './qrcode.min.js',
   './icon-192.png',
   './icon-512.png',
+  './favicon.svg',
   './fonts/latin-400-normal.woff2',
   './fonts/latin-500-normal.woff2',
   './fonts/latin-600-normal.woff2',
